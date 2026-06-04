@@ -100,3 +100,15 @@ ReactDOM.createRoot(rootElement).render(
     document.head.appendChild(s);
   }catch(e){console.warn('FB Pixel loader error', e)}
 })();
+
+// Load Flowbite JS dynamically (non-blocking)
+;(function loadFlowbite(){
+  try{
+    const s = document.createElement('script');
+    s.defer = true;
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js';
+    s.onload = function(){ console.log('Flowbite loaded'); };
+    s.onerror = function(e){ console.warn('Flowbite failed to load', e); };
+    document.head.appendChild(s);
+  }catch(e){console.warn('Flowbite loader error', e)}
+})();
