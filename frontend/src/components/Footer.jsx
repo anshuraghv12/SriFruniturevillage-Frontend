@@ -123,7 +123,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="font-semibold text-orange-500 hover:underline"
               >
-                Versai Technology
+                Anshu Raghav
               </a>
             </p>
           </div>
