@@ -75,3 +75,28 @@ ReactDOM.createRoot(rootElement).render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
+// Load Meta Pixel (Facebook) dynamically and safely (won't run on localhost)
+;(function loadFacebookPixel(){
+  try{
+    if (/localhost|127\.0\.0\.1/.test(window.location.hostname)) return;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    s.onload = function(){
+      try{
+        window.fbq = window.fbq || function(){
+          window.fbq.callMethod ? window.fbq.callMethod.apply(window.fbq, arguments) : window.fbq.queue.push(arguments);
+        };
+        if(!window._fbq) window._fbq = window.fbq;
+        window.fbq.push = window.fbq;
+        window.fbq.loaded = true;
+        window.fbq.version = '2.0';
+        window.fbq.queue = window.fbq.queue || [];
+        window.fbq('init', '4359575050945086');
+        window.fbq('track', 'PageView');
+      }catch(e){console.warn('FB Pixel init failed', e)}
+    };
+    document.head.appendChild(s);
+  }catch(e){console.warn('FB Pixel loader error', e)}
+})();
