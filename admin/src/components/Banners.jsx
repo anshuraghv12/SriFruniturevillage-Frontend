@@ -41,10 +41,8 @@ const Banners = () => {
       const fd = new FormData();
       imageFiles.forEach(f => fd.append('images', f));
       const up = await axios.post(`/api/upload/multiple`, fd, {
-        headers: { 
-          'Content-Type': 'multipart/form-data', 
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` },
+        timeout: 120000
       });
       const urls = up.data?.imageUrls || [];
       if (!urls.length) {

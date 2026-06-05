@@ -82,9 +82,9 @@ const Blog = () => {
     try {
       const response = await axios.post('/api/upload', fd, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+          Authorization: `Bearer ${token}`
+        },
+        timeout: 120000
       });
       return response.data.imageUrl || response.data.url;
     } catch (error) {

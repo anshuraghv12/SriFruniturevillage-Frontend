@@ -9,7 +9,7 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://shreefurniture-backend-production.up.railway.app';
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 120000;
 
 console.log('🌐 Admin API Base URL:', API_BASE_URL);
 

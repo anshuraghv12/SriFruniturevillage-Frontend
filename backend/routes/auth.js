@@ -5,12 +5,51 @@ const { generateToken, generateAdminToken, authenticateToken } = require('../mid
 
 const router = express.Router();
 
-// Google OAuth - Redirect to Google consent
+const normalizeUrl = (url) => {
+  if (!url) return '';
+  return String(url).trim().replace(/\/+$/, '');
+};
+
+const getRequestOrigin = (req) => {
+  const forwardedProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  const protocol = forwardedProto || req.protocol;
+  const host = req.get('host');
+  return `${protocol}://${host}`;
+};
+
+const getFrontendBaseUrl = (req) => {
+  const envFrontend = process.env.FRONTEND_URL || process.env.FRONTEND_BASE_URL;
+  let baseUrl = normalizeUrl(envFrontend);
+
+  if (!baseUrl && process.env.NODE_ENV !== 'production') {
+    baseUrl = normalizeUrl(getRequestOrigin(req));
+  }
+
+  if (!baseUrl) return '';
+  if (baseUrl.startsWith('http://') && process.env.NODE_ENV === 'production') {
+    baseUrl = baseUrl.replace(/^http:/, 'https:');
+  }
+  return baseUrl;
+};
+
+const getBackendBaseUrl = (req) => {
+  const envBackend = process.env.BACKEND_URL;
+  let baseUrl = normalizeUrl(envBackend) || normalizeUrl(getRequestOrigin(req));
+  if (!baseUrl) return '';
+  if (baseUrl.startsWith('http://') && process.env.NODE_ENV === 'production') {
+    baseUrl = baseUrl.replace(/^http:/, 'https:');
+  }
+  return baseUrl;
+};
+
+// Google OAuth - Return redirect URL to browser, avoid sending 30x from the API route
 router.get('/google', async (req, res) => {
   try {
     const clientId = process.env.GOOGLE_CLIENT_ID;
-    const redirectUri = process.env.GOOGLE_REDIRECT_URI; // e.g. https://your-backend.com/api/auth/google/callback
-    if (!clientId || !redirectUri) return res.status(500).send('Google OAuth not configured');
+    const redirectUri = normalizeUrl(process.env.GOOGLE_REDIRECT_URI) || `${getBackendBaseUrl(req)}/api/auth/google/callback`;
+    if (!clientId || !redirectUri) {
+      return res.status(500).json({ message: 'Google OAuth not configured' });
+    }
 
     const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
     authUrl.searchParams.set('client_id', clientId);
@@ -20,10 +59,14 @@ router.get('/google', async (req, res) => {
     authUrl.searchParams.set('access_type', 'offline');
     authUrl.searchParams.set('prompt', 'select_account');
 
-    res.redirect(authUrl.toString());
+    return res.status(200).json({
+      message: 'Google OAuth redirect URL generated',
+      redirectUrl: authUrl.toString(),
+      status: 200
+    });
   } catch (err) {
     console.error('Google redirect error:', err);
-    res.status(500).json({ message: 'Google OAuth redirect failed' });
+    res.status(500).json({ message: 'Google OAuth redirect failed', status: 500 });
   }
 });
 
@@ -33,6 +76,7 @@ router.get('/google/callback', async (req, res) => {
     const code = req.query.code;
     if (!code) return res.status(400).send('Missing code');
 
+    const redirectUri = normalizeUrl(process.env.GOOGLE_REDIRECT_URI) || `${getBackendBaseUrl(req)}/api/auth/google/callback`;
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -40,7 +84,7 @@ router.get('/google/callback', async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        redirect_uri: redirectUri,
         grant_type: 'authorization_code'
       })
     }).then(r => r.json());
@@ -93,15 +137,37 @@ router.get('/google/callback', async (req, res) => {
     const token = generateToken(user);
 
     // Redirect to frontend with token (short-lived in URL) - frontend should consume and remove it
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = getFrontendBaseUrl(req);
+    if (!frontendUrl) {
+      console.error('Google callback error: missing frontend base URL');
+      return res.status(500).json({ message: 'Frontend callback URL not configured', status: 500 });
+    }
+
     const redirectTo = new URL('/oauth-callback', frontendUrl);
     redirectTo.searchParams.set('token', token);
     redirectTo.searchParams.set('uid', user._id.toString());
 
-    res.redirect(redirectTo.toString());
+    const redirectUrl = redirectTo.toString();
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="cache-control" content="no-store" />
+  <meta http-equiv="refresh" content="0;url=${redirectUrl}" />
+  <title>Signing you in...</title>
+</head>
+<body>
+  <p>Signing you in. If you are not redirected automatically, <a href="${redirectUrl}">click here</a>.</p>
+  <script>
+    window.location.replace(${JSON.stringify(redirectUrl)});
+  </script>
+</body>
+</html>`;
+
+    res.status(200).type('html').send(html);
   } catch (err) {
     console.error('Google callback error:', err);
-    res.status(500).json({ message: 'Google OAuth callback failed', error: err.message });
+    res.status(500).json({ message: 'Google OAuth callback failed', error: err.message, status: 500 });
   }
 });
 

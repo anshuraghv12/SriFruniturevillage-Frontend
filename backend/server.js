@@ -15,47 +15,31 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const PORT = Number(process.env.PORT || 5000);
 
 /* ---------------------------  CORS  ----------------------------- */
-const allowedOrigins = [
-  'https://shree-furniture-versai.vercel.app',
-  'https://shree-furniture-versai-v2ee.vercel.app',
-  'https://srifurniturevillage.com',
-  'https://www.srifurniturevillage.com',
-  'https://srifurniturevillage.com',
-  'https://www.srifurniturevillage.com',
-  'http://srifurniturevillage.com',
-  'http://www.srifurniturevillage.com',
-  'http://srifurniturevillage.com',
-  'http://www.srifurniturevillage.com',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:5174',
-  'http://127.0.0.1:3000',
-];
-
-// ⚠️ DEBUG: origin: true if you want to allow all origins temporarily
-// const corsOptions = { origin: true, credentials: true, ... };
-
+// Explicit production-safe origins and development local origins.
 const corsOptions = {
   origin(origin, callback) {
     // ✅ Allow requests with no origin (curl, Postman, mobile apps, some WebViews)
-    // 'null' string origin also allowed (sent by some Android WebViews)
     if (!origin || origin === 'null') return callback(null, true);
 
-    // ⚠️ Robust Check: Allow any of our domains regardless of http/https or www
-    const allowedDomains = [
-      'srifurniturevillage',
-      'shree-furniture-versai',
-      'vercel.app',
-      'railway.app',     // Allow Railway backend self-requests
-      'localhost',
-      '127.0.0.1'
+    const normalizedOrigin = origin.toLowerCase().trim();
+    const allowedProductionOrigins = [
+      'https://shree-furniture-versai.vercel.app',
+      'https://shree-furniture-versai-v2ee.vercel.app',
+      'https://srifurniturevillage.com',
+      'https://www.srifurniturevillage.com'
     ];
 
-    const isAllowed = allowedDomains.some(domain => origin.includes(domain));
+    const isProductionPreview = NODE_ENV === 'production' && (
+      normalizedOrigin.endsWith('.vercel.app') ||
+      normalizedOrigin.endsWith('.railway.app')
+    );
 
-    if (isAllowed) {
+    const isDevelopmentLocal = NODE_ENV !== 'production' && (
+      /^https?:\/\/localhost(:\d+)?$/i.test(normalizedOrigin) ||
+      /^https?:\/\/127\.0\.0\.1(:\d+)?$/i.test(normalizedOrigin)
+    );
+
+    if (allowedProductionOrigins.includes(normalizedOrigin) || isProductionPreview || isDevelopmentLocal) {
       return callback(null, true);
     }
 

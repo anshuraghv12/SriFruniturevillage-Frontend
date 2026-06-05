@@ -134,7 +134,7 @@ const Login = ({ onLogin }) => {
         >
           <p>Default Admin:</p>
           <p>Email: admin@shrifurniture.com</p>
-          <p>Password: admin123</p>
+          <p>Password: Sri@123</p>
         </div>
       </div>
     </div>

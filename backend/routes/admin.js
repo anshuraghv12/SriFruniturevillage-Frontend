@@ -213,10 +213,10 @@ router.post('/products', authenticateToken, adminAuth, [
       });
     }
 
-    // Custom validation: At least one variant image is required
-    if (!req.body.stone_finish_image && !req.body.natural_finish_image) {
+    // Custom validation: require at least one image across main and variant fields
+    if (!req.body.img1 && !req.body.stone_finish_image && !req.body.natural_finish_image) {
       return res.status(400).json({
-        message: 'At least one finish variant image (Stone or Natural) is required',
+        message: 'At least one image is required: main image or a Stone/Natural finish variant',
         status: 400
       });
     }

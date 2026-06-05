@@ -179,9 +179,9 @@ const Products = () => {
     try {
       const response = await axios.post(`/api/upload/multiple`, fd, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+          Authorization: `Bearer ${token}`
+        },
+        timeout: 120000
       });
 
       const uploadedUrls = response.data.imageUrls || [];
@@ -210,7 +210,8 @@ const Products = () => {
           const fdBatch = new FormData();
           batch.forEach(f => fdBatch.append('images', f));
           const resp = await axios.post(`/api/upload/multiple`, fdBatch, {
-            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 120000
           });
           const urls = resp.data.imageUrls || [];
           uploadedUrls.push(...urls);

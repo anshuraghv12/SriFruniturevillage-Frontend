@@ -7,8 +7,28 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+const normalizeUrl = (value) => {
+  if (!value) return '';
+  return String(value).trim().replace(/\/+$|\s+/g, '');
+};
+
+const getBaseUrl = () => {
+  const envBaseUrl = normalizeUrl(process.env.BASE_URL);
+  if (envBaseUrl) {
+    return envBaseUrl.startsWith('http://') && process.env.NODE_ENV === 'production'
+      ? envBaseUrl.replace(/^http:/, 'https:')
+      : envBaseUrl;
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://srifurniturevillage.com';
+  }
+
+  return `http://localhost:${process.env.PORT || 5000}`;
+};
+
 // Determine base URL for returned image paths
-const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
+const BASE_URL = getBaseUrl();
 
 // If Cloudinary is configured, prefer that. Otherwise fallback to local disk storage.
 const useCloudinary = !!(process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_SECRET);
