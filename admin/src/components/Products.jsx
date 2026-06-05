@@ -890,7 +890,6 @@ const Products = () => {
                   multiple
                   onChange={(e) => handleVariantImageChange(e, 'stoneFinish')} 
                   className="mb-2"
-                  required={stoneFinishPreviews.length === 0}
                 />
                 {stoneFinishPreviews.length > 0 && (
                   <div className="image-preview-container mt-2">
@@ -934,8 +933,10 @@ const Products = () => {
                   multiple
                   onChange={(e) => handleVariantImageChange(e, 'naturalFinish')} 
                   className="mb-2"
-                  required={naturalFinishPreviews.length === 0}
                 />
+                <p style={{marginTop: '6px', fontSize: '12px', color: '#555'}}>
+                  Upload main images or variant images. You do not need both Stone and Natural variants to save a product.
+                </p>
                 {naturalFinishPreviews.length > 0 && (
                   <div className="image-preview-container mt-2">
                     {naturalFinishPreviews.map((preview, i) => (
