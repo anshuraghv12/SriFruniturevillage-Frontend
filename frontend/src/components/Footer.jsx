@@ -118,7 +118,7 @@ const Footer = () => {
             <p className="text-xs sm:text-sm text-gray-600 mt-1 md:mt-2">
               Design & Developed By &nbsp;
               <a 
-                href="https://versaitechnology.com/" 
+                href="https://www.linkedin.com/in/aanshu-raghav3/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="font-semibold text-orange-500 hover:underline"

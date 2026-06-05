@@ -176,12 +176,30 @@ const Login = () => {
 
         {/* Social Login Button */}
         <div className="flex justify-center">
-          <button 
+          <button
             type="button"
-            onClick={() => {
-              const base = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '';
-              const url = (base ? base.replace(/\/$/, '') : '') + '/api/auth/google';
-              window.location.href = url;
+            onClick={async () => {
+              try {
+                const base = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (import.meta.env.DEV ? window.location.origin : '');
+                if (!base) {
+                  toast.error('API base URL is not configured. Please contact support.');
+                  return;
+                }
+
+                const url = new URL('/api/auth/google', base).toString();
+                const response = await axios.get(url);
+                const redirectUrl = response?.data?.redirectUrl;
+
+                if (!redirectUrl) {
+                  toast.error('Unable to start Google login. Please try again.');
+                  return;
+                }
+
+                window.location.assign(redirectUrl);
+              } catch (error) {
+                console.error('Google login failed', error);
+                toast.error(error?.response?.data?.message || 'Google login failed');
+              }
             }}
             className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/90 border-2 border-gray-300 hover:border-orange-500 hover:bg-orange-50 transition-all shadow-md hover:shadow-xl transform hover:scale-110"
             aria-label="Continue with Google"

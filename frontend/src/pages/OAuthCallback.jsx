@@ -44,7 +44,7 @@ const OAuthCallback = () => {
         }
 
         // Redirect user to profile
-        navigate('/userprofile');
+        navigate('/userprofile', { replace: true });
       } catch (error) {
         console.error('OAuth callback handling failed', error);
         navigate('/login');

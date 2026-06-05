@@ -87,10 +87,12 @@ API.interceptors.request.use(
     }
 
     // Log request for debugging
-    console.log(`📤 ${config.method.toUpperCase()} ${config.url}`, {
-      params: config.params,
-      data: config.data
-    });
+    if (isDevelopment) {
+      console.log(`📤 ${config.method.toUpperCase()} ${config.url}`, {
+        params: config.params,
+        data: config.data
+      });
+    }
 
     return config;
   },
@@ -104,10 +106,12 @@ API.interceptors.request.use(
 API.interceptors.response.use(
   (response) => {
     // Log successful response
-    console.log(`✅ ${response.config.method.toUpperCase()} ${response.config.url}`, {
-      status: response.status,
-      data: response.data
-    });
+    if (isDevelopment) {
+      console.log(`✅ ${response.config.method.toUpperCase()} ${response.config.url}`, {
+        status: response.status,
+        data: response.data
+      });
+    }
 
     return response;
   },

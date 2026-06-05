@@ -140,6 +140,7 @@ const BlogPage = () => {
                   src="https://www.youtube.com/embed/WPSjhKGGLog?si=5twZUtGOn30wPlJy"
                   title="Manufacturing Unit Tour"
                   frameBorder="0"
+                  loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 ></iframe>
