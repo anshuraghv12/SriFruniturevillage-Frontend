@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import imageCompression from 'browser-image-compression';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -173,8 +174,26 @@ const Products = () => {
       return items.map(it => (typeof it.value === 'string' ? it.value : '') );
     }
 
+    // Compress files before uploading to avoid "File too large" errors
+    const compressedFilesToUpload = await Promise.all(
+      filesToUpload.map(async (file) => {
+        try {
+          const options = {
+            maxSizeMB: 5,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+          };
+          const compressed = await imageCompression(file, options);
+          return new File([compressed], file.name, { type: compressed.type || file.type });
+        } catch (error) {
+          console.error("Error compressing image:", error);
+          return file;
+        }
+      })
+    );
+
     const fd = new FormData();
-    filesToUpload.forEach((file) => fd.append('images', file));
+    compressedFilesToUpload.forEach((file) => fd.append('images', file));
 
     try {
       const response = await axios.post(`/api/upload/multiple`, fd, {
@@ -205,8 +224,8 @@ const Products = () => {
       try {
         const batchSize = 4;
         const uploadedUrls = [];
-        for (let i = 0; i < filesToUpload.length; i += batchSize) {
-          const batch = filesToUpload.slice(i, i + batchSize);
+        for (let i = 0; i < compressedFilesToUpload.length; i += batchSize) {
+          const batch = compressedFilesToUpload.slice(i, i + batchSize);
           const fdBatch = new FormData();
           batch.forEach(f => fdBatch.append('images', f));
           const resp = await axios.post(`/api/upload/multiple`, fdBatch, {

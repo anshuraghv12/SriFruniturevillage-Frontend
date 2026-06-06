@@ -106,7 +106,7 @@ if (useCloudinary) {
 
   const uploadLocal = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024, files: 8 }, // 5MB per file, up to 8 files
+    limits: { fileSize: 15 * 1024 * 1024, files: 8 }, // 15MB per file, up to 8 files
     fileFilter: (req, file, cb) => {
       if (file.mimetype && file.mimetype.startsWith('image/')) cb(null, true);
       else cb(new Error('Only image files are allowed'));
