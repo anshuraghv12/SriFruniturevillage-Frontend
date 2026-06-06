@@ -198,13 +198,13 @@ const Products = () => {
       }
       return result;
     } catch (error) {
-      console.error('Image upload failed (direct):', error && (error.response?.data || error.message || error));
+      const uploadError = error.response?.data?.message || error.message || 'Unknown upload error';
+      console.error('Image upload failed (direct):', error.response?.data || error.message || error);
 
       // Fallback: try uploading in smaller batches (4 at a time)
       try {
         const batchSize = 4;
         const uploadedUrls = [];
-        let uploadPos = 0;
         for (let i = 0; i < filesToUpload.length; i += batchSize) {
           const batch = filesToUpload.slice(i, i + batchSize);
           const fdBatch = new FormData();
@@ -215,6 +215,10 @@ const Products = () => {
           });
           const urls = resp.data.imageUrls || [];
           uploadedUrls.push(...urls);
+        }
+
+        if (uploadedUrls.length === 0) {
+          throw new Error(uploadError || 'Upload returned no image URLs');
         }
 
         // Merge uploadedUrls back into original order
@@ -229,8 +233,9 @@ const Products = () => {
         }
         return result;
       } catch (err2) {
-        console.error('Image upload fallback failed:', err2 && (err2.response?.data || err2.message || err2));
-        return [];
+        const fallbackError = err2.response?.data?.message || err2.message || uploadError || 'Unknown upload error';
+        console.error('Image upload fallback failed:', err2.response?.data || err2.message || err2);
+        throw new Error(fallbackError);
       }
     }
   };
