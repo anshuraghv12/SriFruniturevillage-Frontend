@@ -64,7 +64,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/india/IMG_5698.JPG"
+                    src="/latest/Dining Collection.jpg.jpeg"
                     alt="Dining Collection"
                     loading="lazy"
                   />
@@ -76,7 +76,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/india/IMG_5696.JPG"
+                    src="/latest/Sofa Collection.jpg.jpeg"
                     alt="Sofa Collection"
                     loading="lazy"
                   />
@@ -88,7 +88,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/india/IMG_5697.JPG"
+                    src="/latest/BEDROOM Collection.jpg.jpeg"
                     alt="Bedroom Collection"
                     loading="lazy"
                   />
@@ -104,7 +104,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/images/Web 1.jpg"
+                    src="/latest/BEDROOM Collection (1).jpg.jpeg"
                     alt="Living Room Collection"
                     loading="lazy"
                   />
@@ -116,7 +116,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/images/Web 2.jpg"
+                    src="/latest/Study Collection.jpg.jpeg"
                     alt="Study Table Collection"
                     loading="lazy"
                   />
@@ -128,7 +128,7 @@ const Homepage = () => {
                 <div className="w-full h-[240px] md:h-[260px] lg:h-[280px] overflow-hidden flex items-center justify-center bg-white">
                   <img
                     className="max-h-full max-w-full object-contain"
-                    src="/images/Web 3.jpg"
+                    src="/latest/coffee Collection.jpg.jpeg"
                     alt="Center Table Collection"
                     loading="lazy"
                   />

@@ -8,17 +8,17 @@ const Hero = () => {
   const allImages = [
     {
       id: 1,
-      imageUrl: "/home/Home Page Banner 1440x879 (1).png",
+      imageUrl: "/latest/Home .jpg.jpeg",
       title: "Relax in Premium quality"
     },
     {
       id: 2,
-      imageUrl: "/home/Home Page Banner 1440x879 (2).png",
+      imageUrl: "/latest/Home side 2.jpg.jpeg",
       title: "Modern Bedroom Collection"
     },
     {
       id: 3,
-      imageUrl: "/home/Home Page Banner 1440x879.png",
+      imageUrl: "/latest/Home side.jpg.jpeg",
       title: "Comfort Redefined"
     },
     {
@@ -52,7 +52,7 @@ const Hero = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -84,19 +84,18 @@ const Hero = () => {
   // Mobile Single Slider View
   if (isMobile) {
     return (
-      
+
       <div className="w-full px-3 sm:px-4 py-3 sm:py-4">
         <div className="max-w-[1600px] mx-auto">
           <div className="relative w-full h-[280px] xs:h-[320px] sm:h-[380px] md:h-[450px] rounded-xl overflow-hidden bg-gray-100 shadow-xl group">
-            
+
             {/* All Images in Single Slider */}
             <div className="relative w-full h-full">
               {allImages.map((banner, index) => (
                 <div
                   key={banner.id}
-                  className={`absolute inset-0 transition-opacity duration-700 ${
-                    index === currentSlide ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? "opacity-100" : "opacity-0"
+                    }`}
                 >
                   <img
                     src={banner.imageUrl}
@@ -145,11 +144,10 @@ const Hero = () => {
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`h-2 sm:h-2.5 rounded-full transition-all ${
-                    index === currentSlide
-                      ? "bg-white w-7 sm:w-8"
-                      : "bg-white/60 hover:bg-white/90 w-2 sm:w-2.5"
-                  }`}
+                  className={`h-2 sm:h-2.5 rounded-full transition-all ${index === currentSlide
+                    ? "bg-white w-7 sm:w-8"
+                    : "bg-white/60 hover:bg-white/90 w-2 sm:w-2.5"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
@@ -165,19 +163,18 @@ const Hero = () => {
     <div className="w-full px-3 sm:px-4 md:px-2 lg:px-4 py-3 sm:py-4 md:py-4">
       <div className="max-w-[1600px] mx-auto">
         <div className="grid grid-cols-12 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
-          
+
           {/* Left: Main Carousel Banner - Takes 8 columns on desktop */}
           <div className="col-span-8">
             <div className="relative w-full h-[480px] xl:h-[540px] rounded-xl overflow-hidden bg-gray-100 shadow-xl group">
-              
+
               {/* Carousel Images */}
               <div className="relative w-full h-full">
                 {mainBanners.map((banner, index) => (
                   <div
                     key={banner.id}
-                    className={`absolute inset-0 transition-opacity duration-700 ${
-                      index === currentSlide ? "opacity-100" : "opacity-0"
-                    }`}
+                    className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? "opacity-100" : "opacity-0"
+                      }`}
                   >
                     <img
                       src={banner.imageUrl}
@@ -226,11 +223,10 @@ const Hero = () => {
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${
-                      index === currentSlide
-                        ? "bg-white w-10"
-                        : "bg-white/60 hover:bg-white/90 w-2.5"
-                    }`}
+                    className={`h-2.5 rounded-full transition-all ${index === currentSlide
+                      ? "bg-white w-10"
+                      : "bg-white/60 hover:bg-white/90 w-2.5"
+                      }`}
                     aria-label={`Go to slide ${index + 1}`}
                   />
                 ))}
@@ -239,8 +235,8 @@ const Hero = () => {
           </div>
 
           {/* Right: Top and Bottom Small Banners - Takes 4 columns on desktop */}
-         <div className="hidden sm:grid lg:col-span-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-2 md:gap-3 lg:gap-2">
-            
+          <div className="hidden sm:grid lg:col-span-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-2 md:gap-3 lg:gap-2">
+
             {/* Top Small Banner */}
             <div className="relative w-full h-[257px] xl:h-[267px] rounded-xl overflow-hidden shadow-xl group">
               <img
