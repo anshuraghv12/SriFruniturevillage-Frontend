@@ -550,7 +550,7 @@ const Header = () => {
             <button onClick={() => setIsMobileMenuOpen(false)} className="mr-3 text-gray-800">
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h2 className="text-lg font-bold text-gray-800 tracking-tight">Sri Furniture</h2>
+            <img src="/SFV Log 637x154 Pxl.png" alt="Sri Furniture Village" className="h-6 w-auto object-contain" />
           </div>
           <button 
             onClick={() => {
@@ -597,7 +597,7 @@ const Header = () => {
           ].map((cat, idx) => (
             <button 
               key={idx}
-              onClick={() => { navigate('/category/' + cat.slug); setIsMobileMenuOpen(false); }}
+              onClick={() => { navigate('/' + cat.slug); setIsMobileMenuOpen(false); }}
               className="flex items-center bg-white p-1.5 rounded-lg shadow-sm border border-gray-100 hover:border-orange-200 transition-colors"
             >
               <div className="w-11 h-11 rounded flex-shrink-0 bg-gray-50 mr-2 overflow-hidden">
@@ -610,7 +610,7 @@ const Header = () => {
 
         {/* Links List */}
         <div className="bg-white">
-          <button onClick={() => { navigate('/category/modular-kitchen'); setIsMobileMenuOpen(false); }} className="flex items-center w-full px-5 py-4 border-b border-gray-100 hover:bg-gray-50">
+          <button onClick={() => { navigate('/modular-kitchen'); setIsMobileMenuOpen(false); }} className="flex items-center w-full px-5 py-4 border-b border-gray-100 hover:bg-gray-50">
             <Grid className="h-5 w-5 text-gray-600 mr-4" strokeWidth={1.5} />
             <span className="text-sm font-medium text-gray-700 flex-grow text-left">Modular Kitchen & Wardrobe</span>
             <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">New</span>
