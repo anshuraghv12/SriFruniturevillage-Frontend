@@ -1,6 +1,6 @@
 // Header.jsx - UPDATED VERSION with Wooden Street style mobile header
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Search, User, ShoppingCart, Menu, X, Heart, MapPin, LogOut } from 'lucide-react';
+import { ChevronDown, Search, User, ShoppingCart, Menu, X, Heart, MapPin, LogOut, ArrowLeft, Store, Grid, Truck, Building, PenTool, FileText, Info, MessageCircle, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import API from '../utils/api';
 
@@ -540,124 +540,111 @@ const Header = () => {
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`lg:hidden fixed top-0 left-0 bottom-0 w-80 bg-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto shadow-2xl ${
+        className={`lg:hidden fixed top-0 left-0 bottom-0 w-[85%] max-w-sm bg-gray-50 z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto shadow-2xl ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-orange-600 to-orange-500">
-          <h2 className="text-lg font-bold text-white">Menu</h2>
-          <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-white/20 rounded-full transition-colors">
-            <X className="h-6 w-6 text-white" />
+        {/* Top Header */}
+        <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+          <div className="flex items-center">
+            <button onClick={() => setIsMobileMenuOpen(false)} className="mr-3 text-gray-800">
+              <ArrowLeft className="h-6 w-6" />
+            </button>
+            <h2 className="text-lg font-bold text-gray-800 tracking-tight">Sri Furniture</h2>
+          </div>
+          <button 
+            onClick={() => {
+              if (isLoggedIn) {
+                navigate('/userprofile');
+              } else {
+                navigate('/login');
+              }
+              setIsMobileMenuOpen(false);
+            }} 
+            className="text-sm font-medium text-gray-800 hover:text-orange-600"
+          >
+            {isLoggedIn ? userName : 'Login / Signup'}
           </button>
         </div>
 
-        <div className="p-4">
-          {categories.map((cat) => (
-            <div key={cat._id} className="border-b border-gray-200">
-              <button
-                onClick={() => {
-                  if (menuData[cat.name]) {
-                    setActiveMenu(activeMenu === cat.name ? null : cat.name);
-                  } else {
-                    navigateToSlug(cat.name, true); 
-                  }
-                }}
-                className="flex items-center justify-between w-full py-4 text-left font-medium text-gray-800 hover:text-orange-600 transition-colors"
-              >
-                {cat.name}
-                {menuData[cat.name] && (
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      activeMenu === cat.name ? 'rotate-180 text-orange-600' : ''
-                    }`}
-                  />
-                )}
-              </button>
-
-              {activeMenu === cat.name && menuData[cat.name] && (
-                <div className="pb-4 space-y-4">
-                  <div className="pl-4 mb-2">
-                    <button
-                      onClick={() => navigateToSlug(cat.name, true)}
-                      className="text-sm font-semibold text-orange-600 hover:text-orange-700 underline"
-                    >
-                      View All {cat.name}
-                    </button>
-                  </div>
-
-                  {menuData[cat.name].sections.map((section, idx) => (
-                    <div key={idx} className="pl-4">
-                      <button
-                        onClick={() => toggleMobileSubmenu(cat.name, section.title)}
-                        className="flex items-center justify-between w-full text-xs font-bold text-orange-600 uppercase tracking-wider mb-2"
-                      >
-                        {section.title}
-                        <ChevronDown
-                          className={`h-3 w-3 transition-transform duration-200 ${
-                            activeMobileSubmenu[`${cat.name}-${section.title}`] ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </button>
-                      
-                      {activeMobileSubmenu[`${cat.name}-${section.title}`] && (
-                        <ul className="space-y-2 pl-3">
-                          {section.items.map((item, itemIdx) => (
-                            <li key={itemIdx}>
-                              <button 
-                                onClick={() => navigateToSlug(item, false)}
-                                className="block w-full text-left py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:translate-x-1 transition-all"
-                              >
-                                {item}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+        {/* Promo Banner */}
+        <div className="p-3 bg-[#fff8f3] border-b border-gray-200 flex items-center justify-between cursor-pointer" onClick={() => { navigate('/stores'); setIsMobileMenuOpen(false); }}>
+          <div className="flex items-center">
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-orange-500 shadow-sm mr-3 border border-orange-100">
+              <Store className="h-5 w-5" />
             </div>
+            <div>
+              <p className="text-sm font-semibold text-orange-600">Get Instant Extra Discount*</p>
+              <p className="text-xs text-gray-600">On Visiting Your Nearest Store</p>
+            </div>
+          </div>
+          <ChevronRight className="h-5 w-5 text-gray-400" />
+        </div>
+
+        {/* Category Grid */}
+        <div className="p-3 bg-[#f4f5f8] grid grid-cols-2 gap-3 border-b border-gray-200">
+          {[
+            { name: 'Sofas', img: '/latest/Sofa Collection.jpg.jpeg', slug: 'sofas' },
+            { name: 'Living', img: '/latest/Home side.jpg.jpeg', slug: 'living' },
+            { name: 'Bedroom', img: '/latest/BEDROOM Collection.jpg.jpeg', slug: 'bedroom' },
+            { name: 'Mattress', img: '/latest/BEDROOM Collection (1).jpg.jpeg', slug: 'mattress' },
+            { name: 'Dining', img: '/latest/Dining Collection.jpg.jpeg', slug: 'dining-kitchen' },
+            { name: 'Storage', img: '/latest/Home side 2.jpg.jpeg', slug: 'storage' },
+            { name: 'Study & Office', img: '/latest/Study Collection.jpg.jpeg', slug: 'study-office' },
+            { name: 'Outdoor', img: '/latest/Home.jpg.jpeg', slug: 'outdoor' },
+            { name: 'Decor & Furnishing', img: '/latest/coffee Collection.jpg.jpeg', slug: 'decor' },
+            { name: 'Luxury Furniture', img: '/latest/Home .jpg.jpeg', slug: 'luxury' }
+          ].map((cat, idx) => (
+            <button 
+              key={idx}
+              onClick={() => { navigate('/category/' + cat.slug); setIsMobileMenuOpen(false); }}
+              className="flex items-center bg-white p-1.5 rounded-lg shadow-sm border border-gray-100 hover:border-orange-200 transition-colors"
+            >
+              <div className="w-11 h-11 rounded flex-shrink-0 bg-gray-50 mr-2 overflow-hidden">
+                <img src={cat.img} alt={cat.name} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-xs font-semibold text-gray-800 text-left leading-tight pr-1">{cat.name}</span>
+            </button>
           ))}
         </div>
 
-        {/* Mobile Login/Sign Up Button */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50">
-          {isLoggedIn ? (
-            <>
-              <div className="mb-3 p-3 bg-white rounded-lg border border-gray-200">
-                <p className="text-sm font-semibold text-gray-800">Welcome, {userName}!</p>
-              </div>
+        {/* Links List */}
+        <div className="bg-white">
+          <button onClick={() => { navigate('/category/modular-kitchen'); setIsMobileMenuOpen(false); }} className="flex items-center w-full px-5 py-4 border-b border-gray-100 hover:bg-gray-50">
+            <Grid className="h-5 w-5 text-gray-600 mr-4" strokeWidth={1.5} />
+            <span className="text-sm font-medium text-gray-700 flex-grow text-left">Modular Kitchen & Wardrobe</span>
+            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">New</span>
+          </button>
+          {[
+            { name: 'Track Order', icon: Truck, slug: '/track-order' },
+            { name: 'Stores', icon: Store, slug: '/stores' },
+            { name: 'Furniture Franchise', icon: Building, slug: '/franchise' },
+            { name: 'Design Services', icon: PenTool, slug: '/design-services' },
+            { name: 'Blogs', icon: FileText, slug: '/blogs' },
+            { name: 'About Us', icon: Info, slug: '/about' },
+            { name: 'Support', icon: MessageCircle, slug: '/contact' },
+            { name: 'My Account', icon: User, slug: '/userprofile' }
+          ].map((link, idx) => {
+            const Icon = link.icon;
+            return (
               <button 
-                onClick={() => {
-                  navigate('/userprofile');
-                  setIsMobileMenuOpen(false);
+                key={idx}
+                onClick={() => { 
+                  if (link.name === 'My Account') {
+                    if (isLoggedIn) navigate('/userprofile');
+                    else navigate('/login');
+                  } else {
+                    navigate(link.slug); 
+                  }
+                  setIsMobileMenuOpen(false); 
                 }}
-                className="w-full py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-colors mb-2"
+                className="flex items-center w-full px-5 py-4 border-b border-gray-100 hover:bg-gray-50"
               >
-                View Profile
+                <Icon className="h-5 w-5 text-gray-600 mr-4" strokeWidth={1.5} />
+                <span className="text-sm font-medium text-gray-700">{link.name}</span>
               </button>
-              <button 
-                onClick={() => {
-                  handleLogout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button 
-              onClick={() => {
-                navigate('/login');
-                setIsMobileMenuOpen(false);
-              }}
-              className="w-full py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-colors mb-2"
-            >
-              Login / Sign Up
-            </button>
-          )}
+            )
+          })}
         </div>
       </div>
     </>

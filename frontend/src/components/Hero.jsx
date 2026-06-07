@@ -8,17 +8,17 @@ const Hero = () => {
   const allImages = [
     {
       id: 1,
-      imageUrl: "/latest/Home .jpg.jpeg",
+      imageUrl: "/latest/Home.jpg.jpeg",
       title: "Relax in Premium quality"
     },
     {
       id: 2,
-      imageUrl: "/latest/Home side 2.jpg.jpeg",
+      imageUrl: "/latest/Home .jpg.jpeg",
       title: "Modern Bedroom Collection"
     },
     {
       id: 3,
-      imageUrl: "/latest/Home side.jpg.jpeg",
+      imageUrl: "/home/Home Page Banner 1440x879.png",
       title: "Comfort Redefined"
     },
     {
@@ -28,12 +28,12 @@ const Hero = () => {
     },
     {
       id: 5,
-      imageUrl: "/india/Header web banner png Tv.png",
+      imageUrl: "/latest/Home side.jpg.jpeg",
       title: "Special Deal"
     },
     {
       id: 6,
-      imageUrl: "/india/Header web banner Chest of Drawer.png",
+      imageUrl: "/latest/Home side 2.jpg.jpeg",
       title: "Promotional Banner"
     }
   ];
