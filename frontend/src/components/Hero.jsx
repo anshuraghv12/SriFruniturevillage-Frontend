@@ -87,7 +87,7 @@ const Hero = () => {
 
       <div className="w-full px-3 sm:px-4 py-3 sm:py-4">
         <div className="max-w-[1600px] mx-auto">
-          <div className="relative w-full h-[280px] xs:h-[320px] sm:h-[380px] md:h-[450px] rounded-xl overflow-hidden bg-gray-100 shadow-xl group">
+          <div className="relative w-full h-[280px] xs:h-[320px] sm:h-[380px] md:h-[450px] rounded-xl overflow-hidden bg-white shadow-xl group">
 
             {/* All Images in Single Slider */}
             <div className="relative w-full h-full">
@@ -100,7 +100,7 @@ const Hero = () => {
                   <img
                     src={banner.imageUrl}
                     alt={banner.title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-contain object-center"
                     style={{
                       imageRendering: '-webkit-optimize-contrast',
                       WebkitBackfaceVisibility: 'hidden',
@@ -166,7 +166,7 @@ const Hero = () => {
 
           {/* Left: Main Carousel Banner - Takes 8 columns on desktop */}
           <div className="col-span-8">
-            <div className="relative w-full h-[480px] xl:h-[540px] rounded-xl overflow-hidden bg-gray-100 shadow-xl group">
+            <div className="relative w-full h-[480px] xl:h-[540px] rounded-xl overflow-hidden bg-white shadow-xl group">
 
               {/* Carousel Images */}
               <div className="relative w-full h-full">
@@ -179,7 +179,7 @@ const Hero = () => {
                     <img
                       src={banner.imageUrl}
                       alt={banner.title}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-contain object-center"
                       style={{
                         imageRendering: '-webkit-optimize-contrast',
                         WebkitBackfaceVisibility: 'hidden',
@@ -238,11 +238,11 @@ const Hero = () => {
           <div className="hidden sm:grid lg:col-span-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-2 md:gap-3 lg:gap-2">
 
             {/* Top Small Banner */}
-            <div className="relative w-full h-[257px] xl:h-[267px] rounded-xl overflow-hidden shadow-xl group">
+            <div className="relative w-full h-[257px] xl:h-[267px] rounded-xl overflow-hidden bg-white shadow-xl group">
               <img
                 src={topSmallBanner.imageUrl}
                 alt={topSmallBanner.title}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-center"
                 style={{
                   imageRendering: '-webkit-optimize-contrast',
                   WebkitBackfaceVisibility: 'hidden',
@@ -256,11 +256,11 @@ const Hero = () => {
             </div>
 
             {/* Bottom Small Banner */}
-            <div className="relative w-full h-[257px] xl:h-[267px] rounded-xl overflow-hidden shadow-xl group">
+            <div className="relative w-full h-[257px] xl:h-[267px] rounded-xl overflow-hidden bg-white shadow-xl group">
               <img
                 src={bottomSmallBanner.imageUrl}
                 alt={bottomSmallBanner.title}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-center"
                 style={{
                   imageRendering: '-webkit-optimize-contrast',
                   WebkitBackfaceVisibility: 'hidden',
