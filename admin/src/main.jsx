@@ -6,7 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import axios from "axios";
 
 // ✅ Axios base setup - Configure baseURL for all environments
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://shreefurniture-backend-production.up.railway.app';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.timeout = 120000;
 

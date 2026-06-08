@@ -10,7 +10,7 @@ export const API_CONFIG = {
     }
 
     if (import.meta.env.PROD) {
-      return 'https://shreefurniture-backend-production.up.railway.app';
+      return '';
     }
 
     return 'http://localhost:5000';

@@ -16,7 +16,7 @@ const RecommendedProducts = () => {
   const navigate = useNavigate();
 
   // Base URL from environment or default
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://shreefurniture-backend-production.up.railway.app';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
   // ✅ Fetch products and wishlist on mount
   useEffect(() => {
