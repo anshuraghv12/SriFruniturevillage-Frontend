@@ -117,7 +117,7 @@ const Productpage = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [products, fastDelivery, priceRange, selectedMaterials, selectedSeaters, sortBy]);
+  }, [products, fastDelivery, priceRange, selectedMaterials, selectedSeaters, sortBy, selectedSizeFilter]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -211,12 +211,12 @@ const Productpage = () => {
     });
 
     if (selectedMaterials.length > 0) {
-      filtered = filtered.filter(p => selectedMaterials.includes(p.material));
+      filtered = filtered.filter(p => selectedMaterials.some(m => m.toLowerCase() === (p.material || '').toLowerCase()));
     }
 
     if (selectedSeaters.length > 0) {
       filtered = filtered.filter(p =>
-        selectedSeaters.some(seater => p.pname.toLowerCase().includes(seater.toLowerCase()))
+        selectedSeaters.some(seater => (p.pname || '').toLowerCase().includes(seater.toLowerCase()))
       );
     }
 
@@ -670,7 +670,7 @@ const Productpage = () => {
                             src={displayImage}
                             alt={product.pname}
                             loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-contain sm:object-cover md:group-hover:scale-110 transition-transform duration-500"
                             onError={(e) => e.target.src = 'https://via.placeholder.com/400x300?text=No+Image'}
                           />
                         );

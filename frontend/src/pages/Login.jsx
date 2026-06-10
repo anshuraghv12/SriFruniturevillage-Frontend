@@ -180,21 +180,12 @@ const Login = () => {
             type="button"
             onClick={async () => {
               try {
-                const base = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || (import.meta.env.DEV ? window.location.origin : '');
-                if (!base) {
-                  toast.error('API base URL is not configured. Please contact support.');
-                  return;
-                }
-
-                const url = new URL('/api/auth/google', base).toString();
-                const response = await axios.get(url);
+                const response = await axios.get('/api/auth/google');
                 const redirectUrl = response?.data?.redirectUrl;
-
                 if (!redirectUrl) {
                   toast.error('Unable to start Google login. Please try again.');
                   return;
                 }
-
                 window.location.assign(redirectUrl);
               } catch (error) {
                 console.error('Google login failed', error);

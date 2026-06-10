@@ -364,6 +364,10 @@ const Address = () => {
         toast.warning("Fill You Address !");
       } else {
         if (paymentmethod === "cod") {
+          if (!data.id) {
+            toast.error('Please save your address first by clicking Submit button');
+            return;
+          }
           setLoading(true);
           const response = await axios.post(
             "/api/orders/",

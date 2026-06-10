@@ -205,6 +205,20 @@ const Register = () => {
         <div className="flex justify-center gap-3 sm:gap-4 md:gap-5">
           <button 
             type="button"
+            onClick={async () => {
+              try {
+                const response = await axios.get('/api/auth/google');
+                const redirectUrl = response?.data?.redirectUrl;
+                if (!redirectUrl) {
+                  toast.error('Unable to start Google login. Please try again.');
+                  return;
+                }
+                window.location.assign(redirectUrl);
+              } catch (error) {
+                console.error('Google login failed', error);
+                toast.error(error?.response?.data?.message || 'Google login failed');
+              }
+            }}
             className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/90 border-2 border-gray-300 hover:border-orange-500 hover:bg-orange-50 transition-all shadow-md hover:shadow-xl transform hover:scale-110"
             aria-label="Continue with Google"
           >

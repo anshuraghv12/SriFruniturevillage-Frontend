@@ -78,9 +78,28 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [cartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
   const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) { setCartCount(0); return; }
+        const res = await API.get('/api/cart');
+        const data = Array.isArray(res.data) ? res.data : (res.data.cart || res.data.items || []);
+        const totalItems = data.reduce((acc, item) => acc + (item.qty || 1), 0);
+        setCartCount(totalItems);
+      } catch (err) {
+        console.warn('Could not fetch cart count:', err);
+      }
+    };
+    fetchCartCount();
+    const onUpdate = () => fetchCartCount();
+    window.addEventListener('cartUpdated', onUpdate);
+    return () => window.removeEventListener('cartUpdated', onUpdate);
+  }, [isLoggedIn]);
   const subMenuTimeoutRef = useRef(null);
 
   const menuData = {
@@ -301,7 +320,7 @@ const Header = () => {
               </button>
               <button onClick={() => navigate('/cart')} className="flex flex-col items-center text-gray-700 hover:text-orange-600 transition-colors relative p-2">
                 <ShoppingCart className="h-5 w-5 mb-1" />
-                <span className="text-xs font-medium">Cart (0)</span>
+                <span className="text-xs font-medium">Cart ({cartCount})</span>
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">{cartCount}</span>
                 )}
@@ -466,23 +485,23 @@ const Header = () => {
         {/* ── Links List ── */}
         <div className="bg-white flex-1">
           {/* Modular Kitchen – special row with "New" badge */}
-          <button
+          {/* <button
             onClick={() => { navigate('/modular-kitchen'); setIsMobileMenuOpen(false); }}
             className="flex items-center w-full px-5 py-4 border-b border-gray-100 active:bg-gray-50"
           >
             <Grid className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" strokeWidth={1.5} />
             <span className="text-sm font-medium text-gray-700 flex-grow text-left">Modular Kitchen & Wardrobe</span>
             <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full ml-2">New</span>
-          </button>
+          </button> */}
 
           {[
-            { name: 'Track Order', icon: Truck, slug: '/track-order' },
+            // { name: 'Track Order', icon: Truck, slug: '/track-order' },
             { name: 'Stores', icon: Store, slug: '/stores' },
-            { name: 'Furniture Franchise', icon: Building, slug: '/franchise' },
-            { name: 'Design Services', icon: PenTool, slug: '/design-services' },
-            { name: 'Blogs', icon: FileText, slug: '/blogs' },
+            // { name: 'Furniture Franchise', icon: Building, slug: '/franchise' },
+            // { name: 'Design Services', icon: PenTool, slug: '/design-services' },
+            { name: 'Blogs', icon: FileText, slug: '/blog' },
             { name: 'About Us', icon: Info, slug: '/about' },
-            { name: 'Support', icon: MessageCircle, slug: '/contact' },
+            { name: 'Support', icon: MessageCircle, slug: '/help' },
             { name: 'My Account', icon: User, slug: '/userprofile' }
           ].map((link, idx) => {
             const Icon = link.icon;

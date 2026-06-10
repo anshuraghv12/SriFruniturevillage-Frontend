@@ -90,9 +90,28 @@ const Header = () => {
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState({});
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [cartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
   const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) { setCartCount(0); return; }
+        const res = await API.get('/api/cart');
+        const data = Array.isArray(res.data) ? res.data : (res.data.cart || res.data.items || []);
+        const totalItems = data.reduce((acc, item) => acc + (item.qty || 1), 0);
+        setCartCount(totalItems);
+      } catch (err) {
+        console.warn('Could not fetch cart count:', err);
+      }
+    };
+    fetchCartCount();
+    const onUpdate = () => fetchCartCount();
+    window.addEventListener('cartUpdated', onUpdate);
+    return () => window.removeEventListener('cartUpdated', onUpdate);
+  }, [isLoggedIn]);
   const subMenuTimeoutRef = useRef(null);
 
   // Comprehensive menu data for all categories
@@ -440,7 +459,7 @@ const Header = () => {
                 className="flex flex-col items-center text-gray-700 hover:text-orange-600 transition-colors group relative p-2"
               >
                 <ShoppingCart className="h-5 w-5 mb-1" />
-                <span className="text-xs font-medium">Cart (0)</span>
+                <span className="text-xs font-medium">Cart ({cartCount})</span>
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
                     {cartCount}
