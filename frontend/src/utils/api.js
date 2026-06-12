@@ -18,8 +18,8 @@ const API = axios.create({
 });
 
 const networkRetryConfig = {
-  retries: 2,
-  retryDelayMs: 700,
+  retries: 4,
+  retryDelayMs: 3000,
   retryMethods: ['get', 'head', 'options'],
 };
 
@@ -35,7 +35,8 @@ console.log('🌐 Environment check:', {
 // ✅ Health check function to test API connectivity
 export const checkApiHealth = async (url = API_BASE_URL) => {
   try {
-    const response = await axios.get(`${url}${API_ENDPOINTS.HEALTH}`, {
+    const cleanUrl = url.replace(/\/$/, '');
+    const response = await axios.get(`${cleanUrl}${API_ENDPOINTS.HEALTH}`, {
       timeout: API_CONFIG.HEALTH_CHECK_TIMEOUT
     });
     return response.status === 200;

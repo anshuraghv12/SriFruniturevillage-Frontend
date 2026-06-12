@@ -229,12 +229,11 @@ const Cart = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-
-                    <hr className="mt-3" />
-                    {/* Cart Items List */}
-
-                    {cartItems.map((item) => (
+                      
+                      <hr className="mt-3 border-gray-200" />
+                      
+                      {/* Cart Items List */}
+                      {cartItems.map((item) => (
                       <div key={item._id}>
                         <div className="pt-3 sm:pt-4 flex flex-col sm:flex-row justify-start items-start sm:items-center px-3 sm:px-4 md:px-6 pb-2 gap-3 sm:gap-4">
                           <div className="w-full sm:w-32 h-48 sm:h-28 flex-shrink-0 rounded-lg overflow-hidden">
@@ -347,6 +346,7 @@ const Cart = () => {
                       </div>
                     ))}
                     {/* End Cart Items List */}
+                    </div>
                   </div>
 
                   {/* Price Details Sidebar */}
@@ -389,11 +389,9 @@ const Cart = () => {
             </>
           ) : (
             <div className="flex flex-col justify-center items-center min-h-[60vh] px-4">
-              <img
-                src="https://expresshub.com.bd/img/404.png"
-                alt="Empty Cart"
-                className="max-w-xs sm:max-w-md w-full h-auto"
-              />
+              <div className="text-gray-300 mb-6">
+                <FontAwesomeIcon icon={faShoppingBag} style={{ fontSize: "120px" }} />
+              </div>
               <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg mt-4 sm:mt-6 text-center max-w-md w-full">
                 <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-4">
                   No Products in Cart
