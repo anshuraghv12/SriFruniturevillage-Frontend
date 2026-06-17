@@ -45,6 +45,7 @@ const Productpage = () => {
 
   // Material options (from products)
   const [materials, setMaterials] = useState([]);
+  const [availableSeaters, setAvailableSeaters] = useState([]);
   const [userWishlistIds, setUserWishlistIds] = useState(new Set());
   const [wishlistLoadingMap, setWishlistLoadingMap] = useState({});
 
@@ -184,6 +185,11 @@ const Productpage = () => {
 
       const uniqueMaterials = [...new Set(productsData.map(p => p.material).filter(Boolean))];
       setMaterials(uniqueMaterials.map((m, i) => ({ name: m, count: productsData.filter(p => p.material === m).length })));
+      
+      const foundSeaters = seaterOptions.filter(seater => 
+        productsData.some(p => (p.pname || '').toLowerCase().includes(seater.toLowerCase()) || (p.size || '').toString().toLowerCase().includes(seater.toLowerCase()))
+      );
+      setAvailableSeaters(foundSeaters);
     } catch (err) {
       setError("Failed to load products. Please try again later.");
       setProducts([]);
@@ -202,6 +208,11 @@ const Productpage = () => {
 
       const uniqueMaterials = [...new Set(productsData.map(p => p.material).filter(Boolean))];
       setMaterials(uniqueMaterials.map((m) => ({ name: m, count: productsData.filter(p => p.material === m).length })));
+
+      const foundSeaters = seaterOptions.filter(seater => 
+        productsData.some(p => (p.pname || '').toLowerCase().includes(seater.toLowerCase()) || (p.size || '').toString().toLowerCase().includes(seater.toLowerCase()))
+      );
+      setAvailableSeaters(foundSeaters);
     } catch (err) {
       setError("Failed to search products. Please try again later.");
       setProducts([]);
@@ -489,30 +500,32 @@ const Productpage = () => {
           )}
         </div>
 
-        <div className="border-b">
-          <button
-            onClick={() => setIsSeaterOpen(!isSeaterOpen)}
-            className="w-full p-4 flex items-center justify-between hover:bg-gray-50"
-          >
-            <span className="font-medium text-gray-800">SEATER</span>
-            <FontAwesomeIcon icon={isSeaterOpen ? faChevronUp : faChevronDown} className="text-gray-500" />
-          </button>
-          {isSeaterOpen && (
-            <div className="px-4 pb-4 space-y-2">
-              {seaterOptions.map((seater) => (
-                <label key={seater} className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
-                  <input
-                    type="checkbox"
-                    checked={selectedSeaters.includes(seater)}
-                    onChange={() => handleSeaterToggle(seater)}
-                    className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">{seater}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        {availableSeaters.length > 0 && (
+          <div className="border-b">
+            <button
+              onClick={() => setIsSeaterOpen(!isSeaterOpen)}
+              className="w-full p-4 flex items-center justify-between hover:bg-gray-50"
+            >
+              <span className="font-medium text-gray-800">SEATER</span>
+              <FontAwesomeIcon icon={isSeaterOpen ? faChevronUp : faChevronDown} className="text-gray-500" />
+            </button>
+            {isSeaterOpen && (
+              <div className="px-4 pb-4 space-y-2">
+                {availableSeaters.map((seater) => (
+                  <label key={seater} className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                    <input
+                      type="checkbox"
+                      checked={selectedSeaters.includes(seater)}
+                      onChange={() => handleSeaterToggle(seater)}
+                      className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">{seater}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="p-4">
           <button
@@ -673,7 +686,7 @@ const Productpage = () => {
                     key={product._id}
                     onClick={() => navigate(`/dtproduct/${product._id}`)}
                     className={`bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group 
-                      ${viewMode === 'list' ? 'flex flex-col sm:flex-row' : ''}
+                      ${viewMode === 'list' ? 'flex flex-col sm:flex-row' : 'flex flex-col h-full'}
                     `}
                   >
                     <div className={`relative overflow-hidden aspect-[4/3] ${viewMode === 'list' ? 'w-full sm:w-1/3 flex-shrink-0' : ''}`}>
@@ -722,7 +735,7 @@ const Productpage = () => {
                       )}
                     </div>
 
-                    <div className={`p-3 sm:p-4 ${viewMode === 'list' ? 'w-full sm:w-2/3 flex flex-col justify-between' : ''}`}>
+                    <div className={`p-3 sm:p-4 flex-1 flex flex-col ${viewMode === 'list' ? 'w-full sm:w-2/3 justify-between' : ''}`}>
                       <h3 className="font-semibold text-gray-800 mb-1 line-clamp-2 min-h-[40px] sm:min-h-[48px] text-sm sm:text-base">{product.pname}</h3>
                       <p className="text-xs text-gray-500 mb-2">By {product.brand}</p>
 
@@ -738,7 +751,7 @@ const Productpage = () => {
                         4+ Options
                       </div>
 
-                      <div className="border-t pt-2 sm:pt-3">
+                      <div className="border-t pt-2 sm:pt-3 mt-auto">
                         {product.offer > 0 && (
                           <span className="inline-block bg-orange-500 text-white text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded mb-1 sm:mb-2">Deal Price</span>
                         )}

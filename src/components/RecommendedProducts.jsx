@@ -112,6 +112,31 @@ const RecommendedProducts = () => {
     }
   };
 
+  // ✅ Handle Add to Cart
+  const handleAddToCart = async (e, product) => {
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.warning('Please login to add items to cart');
+        navigate('/login');
+        return;
+      }
+      
+      const price = Math.floor(product.price - (product.price * (product.offer || 0)) / 100);
+      
+      const response = await API.post('/api/cart', {
+        product: product._id,
+        product_name: product.pname,
+        price: price,
+        qty: 1
+      });
+      toast.success(response.data?.message || 'Product added to cart!');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to add product to cart');
+    }
+  };
+
   // ✅ Improved image URL handler
   const getImageUrl = (product) => {
     // Collect possible image values from multiple known fields (main + variants)
@@ -209,7 +234,7 @@ const RecommendedProducts = () => {
             return (
               <div
                 key={product._id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer group"
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer group flex flex-col h-full"
                 onClick={() => handleProductClick(product._id)}
               >
                 {/* Product Image */}
@@ -259,7 +284,7 @@ const RecommendedProducts = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-2 sm:p-3 md:p-4">
+                <div className="p-2 sm:p-3 md:p-4 flex flex-col flex-1">
                   {/* Product Name */}
                   <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 line-clamp-2 min-h-[2.5rem]">
                     {product.pname || 'Unnamed Product'}
@@ -283,7 +308,7 @@ const RecommendedProducts = () => {
                   </div>
 
                   {/* Price */}
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-3 mt-auto">
                     <span className="text-lg font-bold text-gray-900">
                       ₹{Math.floor(product.price - (product.price * (product.offer || 0)) / 100).toLocaleString('en-IN')}
                     </span>
@@ -294,13 +319,9 @@ const RecommendedProducts = () => {
                     )}
                   </div>
 
-                  {/* Add to Cart Button */}
                   <button
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 sm:py-2.5 rounded-md text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition-colors active:scale-95"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      alert('Added to cart!');
-                    }}
+                    onClick={(e) => handleAddToCart(e, product)}
                     aria-label="Add to cart"
                   >
                     <ShoppingCart size={14} className="sm:w-4 sm:h-4" />
