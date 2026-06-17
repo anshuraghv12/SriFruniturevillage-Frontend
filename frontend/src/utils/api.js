@@ -114,6 +114,14 @@ API.interceptors.response.use(
       });
     }
 
+    // Auto-dispatch cartUpdated event when cart is modified
+    if (
+      response.config.url?.includes('/api/cart') && 
+      ['post', 'put', 'delete'].includes(response.config.method?.toLowerCase())
+    ) {
+      try { window.dispatchEvent(new Event('cartUpdated')); } catch (e) {}
+    }
+
     return response;
   },
   (error) => {
