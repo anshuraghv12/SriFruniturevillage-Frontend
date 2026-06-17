@@ -23,6 +23,7 @@ const Productpage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingText, setLoadingText] = useState("Loading products...");
   const [error, setError] = useState("");
 
   // Filter states
@@ -72,6 +73,18 @@ const Productpage = () => {
       SLUG_TO_NAME[slugify(sub)] = sub;
     });
   });
+
+  useEffect(() => {
+    let timer;
+    if (loading) {
+      timer = setTimeout(() => {
+        setLoadingText("Waking up server... Please wait a moment.");
+      }, 4000);
+    } else {
+      setLoadingText("Loading products...");
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   useEffect(() => {
     const invalidSlugs = ['profile', 'userprofile', 'login', 'register', 'cart', 'wishlist', 'address', 'checkout', 'cashfree-callback'];
@@ -275,6 +288,7 @@ const Productpage = () => {
     setPriceRange([0, 500000]);
     setSelectedMaterials([]);
     setSelectedSeaters([]);
+    setSelectedSizeFilter('');
     setSortBy('recommended');
   };
 
@@ -352,7 +366,7 @@ const Productpage = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading products...</p>
+          <p className="text-gray-600">{loadingText}</p>
         </div>
       </div>
     );
@@ -573,7 +587,7 @@ const Productpage = () => {
 
               <div className="fixed bottom-0 left-0 right-0 bg-white p-3 border-t shadow-2xl">
                 <button
-                  onClick={applyFilters}
+                  onClick={() => setIsFilterModalOpen(false)}
                   className="w-full bg-orange-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-orange-600"
                 >
                   Show {filteredProducts.length} Products
