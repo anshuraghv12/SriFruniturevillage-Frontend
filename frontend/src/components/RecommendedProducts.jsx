@@ -243,7 +243,7 @@ const RecommendedProducts = () => {
                     <img
                       src={product.natural_finish_image || imageUrl}
                       alt={product.pname || 'Product'}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-300"
                       onError={() => handleImageError(product._id, imageUrl)}
                       loading="lazy"
                     />
