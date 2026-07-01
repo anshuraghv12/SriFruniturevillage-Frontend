@@ -18,7 +18,7 @@ const Hero = () => {
     },
     {
       id: 3,
-      imageUrl: "/home/Home Page Banner 1440x879.png",
+      imageUrl: "/home/Home Page Banner 1440x879.jpg",
       title: "Comfort Redefined"
     },
     {
@@ -101,7 +101,7 @@ const Hero = () => {
                   <img
                     src={banner.imageUrl}
                     alt={banner.title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-contain object-center"
                     style={{
                       imageRendering: '-webkit-optimize-contrast',
                       WebkitBackfaceVisibility: 'hidden',
@@ -109,6 +109,8 @@ const Hero = () => {
                       transform: 'translateZ(0)',
                       willChange: 'opacity'
                     }}
+                    fetchpriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                     onError={(e) => {
                       e.target.src = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&h=800&fit=crop';
                     }}
@@ -182,7 +184,7 @@ const Hero = () => {
                     <img
                       src={banner.imageUrl}
                       alt={banner.title}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-contain object-center"
                       style={{
                         imageRendering: '-webkit-optimize-contrast',
                         WebkitBackfaceVisibility: 'hidden',
@@ -190,6 +192,8 @@ const Hero = () => {
                         transform: 'translateZ(0)',
                         willChange: 'opacity'
                       }}
+                      fetchpriority={index === 0 ? "high" : "auto"}
+                      loading={index === 0 ? "eager" : "lazy"}
                       onError={(e) => {
                         e.target.src = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&h=800&fit=crop';
                       }}
@@ -246,13 +250,15 @@ const Hero = () => {
               <img
                 src={topSmallBanner.imageUrl}
                 alt={topSmallBanner.title}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-center"
                 style={{
                   imageRendering: '-webkit-optimize-contrast',
                   WebkitBackfaceVisibility: 'hidden',
                   backfaceVisibility: 'hidden',
                   transform: 'translateZ(0)'
                 }}
+                fetchpriority="low"
+                loading="lazy"
                 onError={(e) => {
                   e.target.src = 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&h=600&fit=crop';
                 }}
@@ -271,6 +277,8 @@ const Hero = () => {
                   backfaceVisibility: 'hidden',
                   transform: 'translateZ(0)'
                 }}
+                fetchpriority="low"
+                loading="lazy"
                 onError={(e) => {
                   e.target.src = 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&h=600&fit=crop';
                 }}
