@@ -36,14 +36,14 @@ const Homepage = () => {
           <div className="relative w-full rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
             <img
               className="w-full h-auto object-cover rounded-lg"
-              src="/images/2624x308 Pixle (3).png"
+              src="/images/SFV.jpeg"
               alt="Featured Collection Banner"
               loading="lazy"
             />
           </div>
         </div>
       </div>
-
+    
       <div className="pt-10 md:pt-16 pb-10 md:pb-16 px-4 sm:px-6 md:px-8 lg:px-16 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 md:mb-4">
