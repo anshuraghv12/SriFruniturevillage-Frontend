@@ -26,7 +26,7 @@ const Footer = () => {
                 <p className="leading-relaxed">
                   Factory Address – Plot No. G1-58 to G1-62, Ricco Industrial Area, Ramgarh Shekhawati, District - Sikar, State - Rajasthan, Pin – 331024
                 </p>
-    
+     
               </div>
              <div className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />

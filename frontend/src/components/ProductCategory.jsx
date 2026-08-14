@@ -31,7 +31,7 @@ const ProductCategoryGrid = () => {
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2 md:mb-3">
           Top Picks For You
         </h1>
-        <p className="text-sm sm:text-base md:text-lg text-gray-600 px-4">
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 px-4">``
           Immersive Collection For Your Dream Home
         </p>
         <div className="w-16 sm:w-20 md:w-24 h-1 bg-orange-400 mx-auto mt-3 md:mt-4 rounded-full"></div>

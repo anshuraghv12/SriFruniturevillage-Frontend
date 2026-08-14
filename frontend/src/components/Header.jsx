@@ -233,7 +233,7 @@ const Header = () => {
 
             {/* Right icons */}
             <div className="flex items-center gap-1 flex-shrink-0">
-              <button onClick={() => navigate('/wishlist')} className="relative p-2 rounded-md active:bg-gray-100" aria-label="Wishlist">
+              <button onClick={() => navigate('/wishlist')} className="relative p-2 rounded-md active:bg-gray-100" aria-label="Wis  hlist">
                 <Heart className="h-6 w-6 text-gray-700" />
                 {wishlistCount > 0 && (
                   <span className="absolute top-0.5 right-0.5 bg-orange-600 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-0.5">

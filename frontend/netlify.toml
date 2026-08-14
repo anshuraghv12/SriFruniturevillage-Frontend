@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://shreefurniture-backend-production.up.railway.app/api/:splat"
+  to = "https://srifurniturebackend-production.up.railway.app/api/:splat"
   status = 200
 
 [[redirects]]
