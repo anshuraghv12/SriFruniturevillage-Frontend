@@ -22,19 +22,13 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
-    chunkSizeWarningLimit: 1000, // Set a higher or lower limit as needed
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        entryFileNames: 'assets/entry-[hash].js',
-        chunkFileNames: 'assets/chunk-[hash].js',
-        assetFileNames: 'assets/asset-[name]-[hash][extname]',
-        manualChunks(id) {
-          if (!id.includes('node_modules')) return;
-          if (id.includes('react') || id.includes('scheduler')) return 'vendor-react';
-          if (id.includes('redux') || id.includes('react-redux') || id.includes('@reduxjs')) return 'vendor-state';
-          if (id.includes('axios') || id.includes('formik') || id.includes('yup') || id.includes('framer-motion') || id.includes('jspdf')) return 'vendor-utils';
-          return 'vendor';
-        }
+        // Use neutral hashed filenames to reduce chance of ad-blocker matches
+        entryFileNames: 'assets/[hash].js',
+        chunkFileNames: 'assets/[hash].js',
+        assetFileNames: 'assets/asset-[name]-[hash][extname]'
       }
     }
   }
