@@ -18,8 +18,8 @@ const API = axios.create({
 });
 
 const networkRetryConfig = {
-  retries: 4,
-  retryDelayMs: 3000,
+  retries: 2,
+  retryDelayMs: 1000,
   retryMethods: ['get', 'head', 'options'],
 };
 
@@ -136,9 +136,10 @@ API.interceptors.response.use(
     const isTimeout = error.code === 'ECONNABORTED' || error.message?.includes('timeout');
     const isNetError = error.code === 'ERR_NETWORK' || error.message === 'Network Error';
 
-    if (config.url && isRetryableMethod && (isNetError || isTimeout) && retryCount < networkRetryConfig.retries) {
+    const isTemporaryServerError = [502, 503, 504].includes(error.response?.status);
+    if (config.url && isRetryableMethod && (isNetError || isTimeout || isTemporaryServerError) && retryCount < networkRetryConfig.retries) {
       config.__retryCount = retryCount + 1;
-      const delay = networkRetryConfig.retryDelayMs * config.__retryCount;
+      const delay = networkRetryConfig.retryDelayMs * (2 ** retryCount);
       console.warn(`🔁 Retrying ${config.method?.toUpperCase()} ${config.url} (${config.__retryCount}/${networkRetryConfig.retries}) in ${delay}ms`);
       return new Promise((resolve) => setTimeout(resolve, delay)).then(() => API(config));
     }

@@ -23,7 +23,6 @@ const Productpage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingText, setLoadingText] = useState("Loading products...");
   const [error, setError] = useState("");
 
   // Filter states
@@ -74,18 +73,6 @@ const Productpage = () => {
       SLUG_TO_NAME[slugify(sub)] = sub;
     });
   });
-
-  useEffect(() => {
-    let timer;
-    if (loading) {
-      timer = setTimeout(() => {
-        setLoadingText("Waking up server... Please wait a moment.");
-      }, 4000);
-    } else {
-      setLoadingText("Loading products...");
-    }
-    return () => clearTimeout(timer);
-  }, [loading]);
 
   useEffect(() => {
     const invalidSlugs = ['profile', 'userprofile', 'login', 'register', 'cart', 'wishlist', 'address', 'checkout', 'cashfree-callback'];
@@ -191,7 +178,7 @@ const Productpage = () => {
       );
       setAvailableSeaters(foundSeaters);
     } catch (err) {
-      setError("Failed to load products. Please try again later.");
+      setError("Products are temporarily unavailable. Please try again.");
       setProducts([]);
     } finally {
       setLoading(false);
@@ -214,7 +201,7 @@ const Productpage = () => {
       );
       setAvailableSeaters(foundSeaters);
     } catch (err) {
-      setError("Failed to search products. Please try again later.");
+      setError("Search is temporarily unavailable. Please try again.");
       setProducts([]);
     } finally {
       setLoading(false);
@@ -377,7 +364,7 @@ const Productpage = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">{loadingText}</p>
+          <p className="text-gray-600">Loading products...</p>
         </div>
       </div>
     );
@@ -387,7 +374,7 @@ const Productpage = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center px-4">
-          <p className="text-red-500 text-xl mb-4">{error}</p>
+          <p className="text-gray-700 text-xl mb-4">{error}</p>
           <button
             onClick={() => {
               setError("");

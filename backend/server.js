@@ -74,9 +74,29 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 /* ---------------------------  HEALTH  -------------------------- */
 app.get('/api/health', (req, res) => {
   res.json({
-    status: 'ok',
+    status: mongoose.connection.readyState === 1 ? 'ok' : 'starting',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'connecting',
     time: new Date().toISOString(),
     env: NODE_ENV,
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: mongoose.connection.readyState === 1 ? 'ok' : 'starting',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'connecting',
+  });
+});
+
+// Keep the service responsive during a cold start or database reconnect. A
+// bounded 503 is safer for clients than letting Mongoose buffer requests.
+app.use('/api', (req, res, next) => {
+  if (req.path === '/health' || mongoose.connection.readyState === 1) return next();
+
+  res.set('Retry-After', '3');
+  return res.status(503).json({
+    message: 'The service is starting. Please retry shortly.',
+    code: 'DATABASE_STARTING',
   });
 });
 
@@ -153,51 +173,42 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-/*
-  Connect to Mongo and start the HTTP server.
-  We attach an 'error' listener to the server to detect EADDRINUSE
-  and provide a nice message rather than crashing silently.
-*/
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
+// Start HTTP immediately so Railway health checks and clients never wait for
+// the initial Mongo connection before receiving a response.
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT} (env=${NODE_ENV})`);
+});
+
+server.on('error', (err) => {
+  console.error('Server error:', err);
+  process.exit(1);
+});
+
+let reconnectDelayMs = 1000;
+const connectDatabase = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+      maxPoolSize: 10,
+      minPoolSize: 1,
+    });
+    reconnectDelayMs = 1000;
     console.log('✅ MongoDB connected');
+  } catch (err) {
+    console.error(`MongoDB connection failed; retrying in ${reconnectDelayMs / 1000}s:`, err.message || err);
+    setTimeout(connectDatabase, reconnectDelayMs);
+    reconnectDelayMs = Math.min(reconnectDelayMs * 2, 30000);
+  }
+};
 
-    const server = app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT} (env=${NODE_ENV})`);
-    });
+connectDatabase();
 
-    server.on('error', (err) => {
-      if (err && err.code === 'EADDRINUSE') {
-        console.error(`❌ Port ${PORT} already in use. Please stop the running process or change PORT.`);
-        // Provide helpful commands based on platform
-        console.error('Windows: netstat -ano | findstr :%s   then taskkill /PID <pid> /F', PORT);
-        console.error('Linux/Mac: lsof -i :%s  then kill -9 <pid>', PORT);
-        process.exit(1);
-      } else {
-        console.error('Server error:', err);
-        process.exit(1);
-      }
-    });
-
-    // graceful shutdown handlers
-    const shutdown = () => {
-      console.log('SIGTERM received — shutting down gracefully');
-      server.close(() => {
-        console.log('HTTP server closed');
-        mongoose.connection.close().then(() => {
-          console.log('Mongo connection closed');
-          process.exit(0);
-        }).catch((err) => {
-          console.error('Error closing MongoDB connection:', err);
-          process.exit(1);
-        });
-      });
-    };
-    process.on('SIGTERM', shutdown);
-    process.on('SIGINT', shutdown);
-  })
-  .catch((err) => {
-    console.error('MongoDB connection failed:', err.message || err);
-    process.exit(1);
+const shutdown = () => {
+  console.log('SIGTERM received — shutting down gracefully');
+  server.close(() => {
+    mongoose.connection.close().finally(() => process.exit(0));
   });
+};
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);

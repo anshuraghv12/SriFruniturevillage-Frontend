@@ -19,8 +19,8 @@ export const API_CONFIG = {
   // Development fallback
   DEV_FALLBACK_URL: 'http://localhost:5000',
 
-  // Timeouts - increased for mobile networks which can be slow
-  DEFAULT_TIMEOUT: 45000,   // 45 seconds for mobile networks
+  // Keep requests bounded so a failed API cannot hold a page in a loader.
+  DEFAULT_TIMEOUT: 12000,
   HEALTH_CHECK_TIMEOUT: 3000, // 3 seconds - fast fail health check
 
   // Headers

@@ -286,7 +286,8 @@ productSchema.virtual('discountedPrice').get(function() {
   return Math.floor(this.price - (this.price * this.offer) / 100);
 });
 
-// Index for search
+// Indexes for category listings and search
+productSchema.index({ category: 1, createdAt: -1 });
 productSchema.index({ pname: 'text', pdesc: 'text', brand: 'text' });
 
 // Cart Schema
